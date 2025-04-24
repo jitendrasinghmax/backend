@@ -56,13 +56,6 @@ app.use(cors({
     maxAge: 86400
 }));
 
-// Configure default cookie settings
-const cookieConfig = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
-};
-
 app.use('/api/notes',noteRouter);
 app.use('/api/user',userRouter);
 

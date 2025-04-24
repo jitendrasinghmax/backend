@@ -16,7 +16,13 @@ const createUserController=async(req:Request,res:Response)=>{
 try{
     const user=await createUser({email,password});
     const token=jwt.sign({userId:user._id},process.env.JWT_SECRET as string);
-    res.cookie("token",token)
+    res.cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+        path: '/',
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    });
     res.status(200).json({
         message:"User created successfully",
         user:user,
@@ -48,7 +54,13 @@ const loginUserController=async(req:Request,res:Response)=>{
             return
         }
     const token=jwt.sign({userId:user._id},process.env.JWT_SECRET as string);
-    res.cookie("token",token)
+    res.cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+        path: '/',
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    });
     res.status(200).json({
         message:"User logged in successfully",
         user:user
@@ -118,7 +130,12 @@ const getUserEmailController=async(req:Request,res:Response)=>{
     }
 }
 const logoutUserController=async(req:Request,res:Response)=>{
-    res.clearCookie("token");
+    res.clearCookie("token", {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+        path: '/'
+    });
     res.status(200).json({
         message:"User logged out successfully"
     })
