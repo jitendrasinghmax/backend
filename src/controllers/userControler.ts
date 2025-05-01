@@ -39,7 +39,7 @@ const loginUserController=async(req:Request,res:Response)=>{
     const isValidData=validateUser({email,password});
     if(!isValidData.success){
         res.status(400).json({
-            message:"Invalid data",
+            message:"Invalid credentials",
             error:isValidData.error
         })
         return;
@@ -76,7 +76,7 @@ const restrictUserController=async(req:Request,res:Response,next:NextFunction)=>
     const token=req.cookies.token;
     if(!token){
         res.status(401).json({
-            message:"Unauthorized"
+            message:"logged out"
         })
         return;
     }
@@ -86,7 +86,7 @@ const restrictUserController=async(req:Request,res:Response,next:NextFunction)=>
         next();
     }catch(error){
         res.status(401).json({
-            message:"Unauthorized",
+            message:"logged out",
             error:error
         })
     }
@@ -96,7 +96,7 @@ const getUsersController=async(req:Request,res:Response)=>{
     const owner=req.body.owner;
     if(!query){
         res.status(400).json({
-            message:"Invalid data"
+            message:"Invalid credentials"
         })
         return;
     }

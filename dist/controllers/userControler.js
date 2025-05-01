@@ -30,7 +30,13 @@ const createUserController = (req, res) => __awaiter(void 0, void 0, void 0, fun
     try {
         const user = yield (0, userService_1.createUser)({ email, password });
         const token = jsonwebtoken_1.default.sign({ userId: user._id }, process.env.JWT_SECRET);
-        res.cookie("token", token);
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none',
+            path: '/',
+            maxAge: 24 * 60 * 60 * 1000 // 24 hours
+        });
         res.status(200).json({
             message: "User created successfully",
             user: user,
@@ -49,7 +55,7 @@ const loginUserController = (req, res) => __awaiter(void 0, void 0, void 0, func
     const isValidData = (0, zodValidator_1.validateUser)({ email, password });
     if (!isValidData.success) {
         res.status(400).json({
-            message: "Invalid data",
+            message: "Invalid credentials",
             error: isValidData.error
         });
         return;
@@ -64,7 +70,13 @@ const loginUserController = (req, res) => __awaiter(void 0, void 0, void 0, func
             return;
         }
         const token = jsonwebtoken_1.default.sign({ userId: user._id }, process.env.JWT_SECRET);
-        res.cookie("token", token);
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none',
+            path: '/',
+            maxAge: 24 * 60 * 60 * 1000 // 24 hours
+        });
         res.status(200).json({
             message: "User logged in successfully",
             user: user
@@ -82,7 +94,7 @@ const restrictUserController = (req, res, next) => __awaiter(void 0, void 0, voi
     const token = req.cookies.token;
     if (!token) {
         res.status(401).json({
-            message: "Unauthorized"
+            message: "logged out"
         });
         return;
     }
@@ -93,7 +105,7 @@ const restrictUserController = (req, res, next) => __awaiter(void 0, void 0, voi
     }
     catch (error) {
         res.status(401).json({
-            message: "Unauthorized",
+            message: "logged out",
             error: error
         });
     }
@@ -104,7 +116,7 @@ const getUsersController = (req, res) => __awaiter(void 0, void 0, void 0, funct
     const owner = req.body.owner;
     if (!query) {
         res.status(400).json({
-            message: "Invalid data"
+            message: "Invalid credentials"
         });
         return;
     }
@@ -141,7 +153,12 @@ const getUserEmailController = (req, res) => __awaiter(void 0, void 0, void 0, f
 });
 exports.getUserEmailController = getUserEmailController;
 const logoutUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.clearCookie("token");
+    res.clearCookie("token", {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+        path: '/'
+    });
     res.status(200).json({
         message: "User logged out successfully"
     });
