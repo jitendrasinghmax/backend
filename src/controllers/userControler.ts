@@ -74,6 +74,7 @@ const loginUserController=async(req:Request,res:Response)=>{
 }
 const restrictUserController=async(req:Request,res:Response,next:NextFunction)=>{
     const token=req.cookies.token;
+    console.log(token)
     if(!token){
         res.status(401).json({
             message:"logged out"
