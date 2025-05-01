@@ -92,6 +92,7 @@ const loginUserController = (req, res) => __awaiter(void 0, void 0, void 0, func
 exports.loginUserController = loginUserController;
 const restrictUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const token = req.cookies.token;
+    console.log(token);
     if (!token) {
         res.status(401).json({
             message: "logged out"
@@ -101,6 +102,7 @@ const restrictUserController = (req, res, next) => __awaiter(void 0, void 0, voi
     try {
         const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
         req.body.owner = decoded.userId;
+        console.log(decoded);
         next();
     }
     catch (error) {

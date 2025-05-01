@@ -84,6 +84,7 @@ const restrictUserController=async(req:Request,res:Response,next:NextFunction)=>
     try{
         const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { userId: string };
         req.body.owner = decoded.userId;
+        console.log(decoded)
         next();
     }catch(error){
         res.status(401).json({
