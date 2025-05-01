@@ -60,7 +60,7 @@ app.use('/api/notes',noteRouter);
 app.use('/api/user',userRouter);
 
 app.get("/", (req, res) => {
-    res.send("Hello World");
+    res.status(200).json({status:true})
 });
 
 app.listen(process.env.PORT||3000, () => {
